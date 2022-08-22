@@ -11,7 +11,7 @@ npm i rutube-player
 Но, можно просто подключить файл к HTML странице:
 
 ```html
-<script src="https://unpkg.com/rutube-player@1.0.2"></script>
+<script src="https://unpkg.com/rutube-player@1.0.3"></script>
 ```
 
 ## Инициализация
