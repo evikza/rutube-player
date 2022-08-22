@@ -1,5 +1,7 @@
 # rutube-player
 
+Обертка над [Rutube Player JSON API](https://github.com/rutube/RutubePlayerJSAPI).
+
 ## Установка
 
 
