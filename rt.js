@@ -9,6 +9,8 @@ const Rutube = function () {
 
     this.selector = selector;
     this.config = config;
+    this.duration = null;
+    this.videoCurrentDuration = 0;
 
     this.renderOnPage();
   };
@@ -43,18 +45,25 @@ const Rutube = function () {
 
   this.setPlayerState = function (status) {
     const playerState = {
-      playerState: { PLAYING: 0, PAUSED: 0, STOPPED: 0 },
+      PLAYING: 0,
+      PAUSED: 0,
+      STOPPED: 0,
+      ENDED: 0,
     };
 
-    for (let state in playerState.playerState) {
+    for (let state in playerState) {
       if (state.toLowerCase() === status.toLowerCase()) {
-        playerState.playerState[state] = 1;
+        playerState[state] = 1;
 
         break;
       }
     }
 
-    return playerState;
+    return { playerState };
+  };
+
+  this.currentDuration = function () {
+    return this.videoCurrentDuration;
   };
 
   for (let [iterator, type] of Object.entries({
@@ -82,15 +91,27 @@ const Rutube = function () {
 
   this.playerEvent = function (receivedMessage) {
     switch (receivedMessage.type) {
+      case 'player:durationChange':
+        // ...
+
+        break;
       case 'player:ready':
-        this.triggerEventObserver('onReady');
+        this.triggerEventObserver('onReady', {
+          videoId: receivedMessage.data.videoId,
+          clientId: receivedMessage.data.clientId,
+        });
 
         break;
       case 'player:changeState':
+      case 'player:playComplete':
         this.triggerEventObserver(
           'onStateChange',
-          this.setPlayerState(receivedMessage.data.state)
+          this.setPlayerState(receivedMessage.data.state || 'ENDED')
         );
+
+        break;
+      case 'player:currentTime':
+        this.videoCurrentDuration = receivedMessage.data.time;
 
         break;
     }
@@ -106,3 +127,10 @@ const Rutube = function () {
     0
   );
 };
+
+if (typeof exports !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
+    exports = module.exports = Rutube;
+  }
+  exports.Rutube = Rutube;
+}
