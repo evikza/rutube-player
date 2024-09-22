@@ -58,13 +58,13 @@ rt.Player('player', {
 
 Возможность подписаться на событие состояния плеера и вызвать пользовательскую функцию:
 
-```json
+```js
 {
   /* ... */
   "videoId": "6e5e06ad0f3104ae47fb0f69d2198855",
   "events": {
-    "onReady": "onPlayerReady",
-    "onStateChange": "onPlayerStateChange"
+    "onReady": onPlayerReady,
+    "onStateChange": onPlayerStateChange
   }
 }
 ```
